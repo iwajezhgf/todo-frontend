@@ -1,0 +1,26 @@
+body {
+  background-color: #f7f6f8;
+}
+
+[data-bs-theme="dark"] body {
+  background-color: #151515;
+}
+
+.card {
+  --bs-card-cap-bg: initial;
+  --bs-card-cap-padding-y: 1rem;
+  --bs-card-cap-padding-x: 1.5rem;
+  --bs-card-spacer-y: 1.5rem;
+  --bs-card-spacer-x: 1.5rem;
+  box-shadow: var(--bs-box-shadow-sm);
+  border: 0;
+}
+
+.c-pointer {
+  cursor: pointer;
+}
+
+.bg-grabient-fuchsia {
+  background-color: #FF3CAC;
+  background-image: linear-gradient(331deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%);
+}
