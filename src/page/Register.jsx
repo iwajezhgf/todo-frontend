@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import Wrapper from '../component/Wrapper'
 import useTitle from '../hook/useTitle'
 import { fetch0 } from '../lib/fetch'
+import Notifications from '../lib/notifications'
 
 const RegisterPage = () => {
   useTitle('Registration')
@@ -42,10 +43,16 @@ const RegisterPage = () => {
       if (body.ok) {
         navigate('/login')
       } else {
-        console.log(body)
+        switch (body.response.code) {
+          case 'already_exists':
+            Notifications.error('User with this email already exists')
+            break
+          default:
+            Notifications.error(body.response.message)
+        }
       }
     } catch (e) {
-      console.log(e)
+      Notifications.error('Unable to connect to server')
     }
 
     setLoading(false)

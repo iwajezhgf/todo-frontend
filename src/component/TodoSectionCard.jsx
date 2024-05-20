@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import usePagination from '../hook/usePagination'
+import { EVENT_UPDATE_TODOS, EventBus } from '../lib/eventbus'
 import { fetch0 } from '../lib/fetch'
 import { textNormalizer } from '../lib/util'
 
@@ -8,8 +9,10 @@ const TodoSectionCard = ({ showEdit, setEdit, onComplete, onDelete }) => {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    console.log(pagination.items)
-  }, [pagination])
+    if (pagination.page !== 0 || !pagination.items)
+      return
+    return EventBus.on(EVENT_UPDATE_TODOS, () => pagination.load())
+  }, [pagination.page, pagination.items])
 
   return <div>
     {pagination.items?.length === 0 && <div className="text-center">
@@ -55,7 +58,6 @@ const TodoSectionCard = ({ showEdit, setEdit, onComplete, onDelete }) => {
               onClick={() => {
                 showEdit(true)
                 setEdit(item)
-                pagination.load()
               }}
             >
             <i className="bi bi-pencil-square" />

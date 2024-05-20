@@ -7,6 +7,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import Layout from './component/Layout'
+import NotificationContainer from './component/NotificationContainer'
 import Root from './component/Root'
 
 import HomePage from './page/Home'
@@ -28,5 +29,6 @@ const router = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <RouterProvider router={router} />
+    <NotificationContainer />
   </React.StrictMode>
 )

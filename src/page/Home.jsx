@@ -4,7 +4,9 @@ import { Button, Form, Modal, Spinner } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import TodoSectionCard from '../component/TodoSectionCard'
 import useTitle from '../hook/useTitle'
+import { EVENT_UPDATE_TODOS, EventBus } from '../lib/eventbus'
 import { fetch0 } from '../lib/fetch'
+import Notifications from '../lib/notifications'
 
 const NewTodo = () => {
   const {
@@ -38,13 +40,17 @@ const NewTodo = () => {
       const body = await response.json()
 
       if (body.ok) {
+        Notifications.success('To-do successfully added')
+        EventBus.emit(EVENT_UPDATE_TODOS)
         reset()
-        console.log(body)
       } else {
-        console.log(body)
+        switch (body.response.code) {
+          default:
+            Notifications.error(body.response.message)
+        }
       }
     } catch (e) {
-      console.log(e)
+      Notifications.error('Unable to connect to server')
     }
 
     setLoading(false)
@@ -131,13 +137,22 @@ const PasswordModal = ({ show, close }) => {
       })
       const body = await response.json()
       if (body.ok) {
-        console.log(body)
+        Notifications.success('Password has been successfully changed')
         close()
       } else {
-        console.log(body)
+        switch (body.response.code) {
+          case 'invalid_credentials':
+            Notifications.error('Current password is incorrect')
+            break
+          case 'password_equals':
+            Notifications.error('Current and new passwords match')
+            break
+          default:
+            Notifications.error(body.response.message)
+        }
       }
     } catch (e) {
-      console.log(e)
+      Notifications.error('Unable to connect to server')
     }
 
     setLoading(false)
@@ -255,13 +270,17 @@ const EditTodoModal = ({ show, close, item }) => {
       const body = await response.json()
 
       if (body.ok) {
-        console.log(body)
+        Notifications.success('To-do successfully changed')
+        EventBus.emit(EVENT_UPDATE_TODOS)
         close()
       } else {
-        console.log(body)
+        switch (body.response.code) {
+          default:
+            Notifications.error(body.response.message)
+        }
       }
     } catch (e) {
-      console.log(e)
+      Notifications.error('Unable to connect to server')
     }
 
     setLoading(false)
@@ -335,12 +354,16 @@ const HomePage = () => {
       .then(r => r.json())
       .then(body => {
         if (body.ok) {
-          console.log(body)
+          Notifications.success('To-do status has been changed')
+          EventBus.emit(EVENT_UPDATE_TODOS)
         } else {
-          console.log(body)
+          switch (body.response.code) {
+            default:
+              Notifications.error(body.response.message)
+          }
         }
       })
-      .catch(e => console.log(e))
+      .catch(() => Notifications.error('Unable to connect to server'))
   }
 
   const onDelete = id => {
@@ -348,12 +371,16 @@ const HomePage = () => {
       .then(r => r.json())
       .then(body => {
         if (body.ok) {
-          console.log(body)
+          Notifications.success('To-do successfully deleted')
+          EventBus.emit(EVENT_UPDATE_TODOS)
         } else {
-          console.log(body)
+          switch (body.response.code) {
+            default:
+              Notifications.error(body.response.message)
+          }
         }
       })
-      .catch(e => console.log(e))
+      .catch(() => Notifications.error('Unable to connect to server'))
   }
 
   return <>

@@ -5,6 +5,7 @@ import Wrapper from '../component/Wrapper'
 import useApp from '../hook/useApp'
 import useTitle from '../hook/useTitle'
 import { fetch0, setToken } from '../lib/fetch'
+import Notifications from '../lib/notifications'
 
 const LoginPage = () => {
   useTitle('Authorization')
@@ -39,10 +40,16 @@ const LoginPage = () => {
         })
         navigate('/')
       } else {
-        console.log(body)
+        switch (body.response.code) {
+          case 'invalid_credentials':
+            Notifications.error('Incorrect email or password')
+            break
+          default:
+            Notifications.error(body.response.message)
+        }
       }
     } catch (e) {
-      console.log(e)
+      Notifications.error('Unable to connect to server')
     }
 
     setLoading(false)
