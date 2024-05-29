@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { FloatingLabel, Form, Spinner } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Wrapper from '../component/Wrapper'
 import useTitle from '../hook/useTitle'
 import { fetch0 } from '../lib/fetch'
@@ -131,6 +131,8 @@ const RegisterPage = () => {
         {loading && <Spinner className="align-baseline" as="span" size="sm" aria-hidden="true" />}
         {loading ? ' Loading...' : 'Submit'}
       </button>
+
+      <p className="text-center">Already have an account? <Link to="/login">Login</Link></p>
     </Form>
   </Wrapper>
 }
